@@ -4,6 +4,8 @@
  */
 package br.ifce.ppd.view;
 
+import com.sun.jmx.remote.internal.ClientCommunicatorAdmin;
+
 /**
  *
  * @author malveira
@@ -39,6 +41,11 @@ public class Login extends javax.swing.JFrame {
         jbtEntrar.setText("Entrar");
 
         jbtCadastrar.setText("Cadastrar");
+        jbtCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtCadastrarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Login:");
 
@@ -88,6 +95,10 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtCadastrarActionPerformed
+        
+    }//GEN-LAST:event_jbtCadastrarActionPerformed
 
     /**
      * @param args the command line arguments

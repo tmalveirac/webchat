@@ -5,6 +5,9 @@
 package br.ifce.ppd.view;
 
 import br.ifce.ppd.com.Cliente;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -17,6 +20,12 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+        cliente = new Cliente("Tiago");
+        cliente.getInverterservice().cadastrar(cliente.getNome());
+        ArrayList<String> lista = cliente.getInverterservice().getUsuarios();
+        insereListaChat(lista);   
+        getRootPane().setDefaultButton(jbtEnviar);
+        jltUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     /**
@@ -29,15 +38,15 @@ public class Principal extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        jbtIniciarConversa = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jltUsuario = new javax.swing.JList();
         jtpPainelAbas = new javax.swing.JTabbedPane();
         jpAba1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtaMensagem = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        jtfEnviarMensagem = new javax.swing.JTextField();
+        jbtEnviar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -46,25 +55,31 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuários", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        jTextArea2.setColumns(13);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        jbtIniciarConversa.setText("Iniciar Conversa");
+        jbtIniciarConversa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtIniciarConversaActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Iniciar Conversa");
+        jScrollPane3.setViewportView(jltUsuario);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jbtIniciarConversa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(jScrollPane3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtIniciarConversa))
         );
 
         jpAba1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -73,10 +88,10 @@ public class Principal extends javax.swing.JFrame {
         jtaMensagem.setRows(5);
         jScrollPane1.setViewportView(jtaMensagem);
 
-        jButton2.setText("Enviar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jbtEnviar.setText("Enviar");
+        jbtEnviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jbtEnviarActionPerformed(evt);
             }
         });
 
@@ -91,9 +106,9 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jScrollPane1))
                     .addGroup(jpAba1Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jtfEnviarMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)))
+                        .addComponent(jbtEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jpAba1Layout.setVerticalGroup(
@@ -103,9 +118,9 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jpAba1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(jtfEnviarMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbtEnviar))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         jtpPainelAbas.addTab("Aba1", jpAba1);
@@ -130,21 +145,36 @@ public class Principal extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jtpPainelAbas, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jtpPainelAbas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtEnviarActionPerformed
         Aba2 aba = new Aba2();
+ 
+        //jtaMensagem.append(cliente.getNome()+ " - " + cliente.getInverterservice().inverter("Testando Web Service!"));
         
-        cliente = new Cliente("Tiago");
-       
-        jtaMensagem.append(cliente.getNome()+ " - " + cliente.getInverterservice().inverter("Testando Web Service!"));
-     
+        cliente.getInverterservice().enviarMensagem(cliente.getNome(), cliente.getNome()+" enviou: "+jtfEnviarMensagem.getText());
+        
         jtpPainelAbas.addTab("Exemplo",aba);
-    }//GEN-LAST:event_jButton2ActionPerformed
+        jtfEnviarMensagem.setText("");
+    }//GEN-LAST:event_jbtEnviarActionPerformed
+
+    private void jbtIniciarConversaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtIniciarConversaActionPerformed
+        new Thread(new Runnable() {
+            public void run() {
+                System.err.println(jltUsuario.getSelectedValue().toString());
+                while(true){
+                    String resp = cliente.getInverterservice().getMensagem(jltUsuario.getSelectedValue().toString());
+                    if (!resp.equals("")){
+                         escreveMensagemChat(resp);
+                    }                  
+                }
+            }
+        }).start();
+    }//GEN-LAST:event_jbtIniciarConversaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,30 +206,89 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                Principal principal = new Principal();
+                principal.setVisible(true);
+                
+                
+                
+                //Verifica se chegou mensagens
+                /*while (true){
+                    String msg = principal.getCliente().getMensagem();
+                    if (!msg.equals("")){
+                        escreveMensagemChat(msg); 
+                    }
+                }*/
             }
         });
+        
+
+        
+        
     }
     
     public static void escreveMensagemChat(String msg){
-        jtaMensagem.append("\n" + msg);
+        jtaMensagem.append(msg);
     }
     
+    /**
+    * Insere um nome na lista de login do Chat
+    *             
+    * @param nome   nome a ser inserido na lista do chat
+    * @return       void
+    */
+    public static void insereListaChat(ArrayList<String> listaLogin){
+        
+        for (String s : listaLogin){
+            if (idNomeListaChat(s) == -1) {
+                listModel.addElement(s);
+                jltUsuario.setModel(listModel);
+            }
+        }
+        
+        
+    }    
+    
+   
+    
+    /**
+    * Identifica o id de um nome na lista do chat
+    *             
+    * @param    nome   nome a ser buscado na lista de login do chat
+    * @return   void   indice i do nome da lista, se existir. -1, caso contrário 
+    */
+    public static int idNomeListaChat(String nome){
+        
+        for (int i=0; i<listModel.getSize();i++){
+            if (listModel.get(i).toString().equals(nome)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private static javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton jbtEnviar;
+    private javax.swing.JButton jbtIniciarConversa;
+    private static javax.swing.JList jltUsuario;
     private javax.swing.JPanel jpAba1;
     private static javax.swing.JTextArea jtaMensagem;
+    private javax.swing.JTextField jtfEnviarMensagem;
     private javax.swing.JTabbedPane jtpPainelAbas;
     // End of variables declaration//GEN-END:variables
     private Cliente cliente;
+    private static DefaultListModel  listModel = new DefaultListModel();    
 
+    public Cliente getCliente() {
+        return cliente;
+    }
+    
+    
 }

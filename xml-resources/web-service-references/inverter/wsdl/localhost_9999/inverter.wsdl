@@ -28,6 +28,18 @@
 <message name="enviarMensagemResponse">
 <part name="parameters" element="tns:enviarMensagemResponse"></part>
 </message>
+<message name="getMensagem">
+<part name="parameters" element="tns:getMensagem"></part>
+</message>
+<message name="getMensagemResponse">
+<part name="parameters" element="tns:getMensagemResponse"></part>
+</message>
+<message name="getUsuarios">
+<part name="parameters" element="tns:getUsuarios"></part>
+</message>
+<message name="getUsuariosResponse">
+<part name="parameters" element="tns:getUsuariosResponse"></part>
+</message>
 <portType name="ServidorItf">
 <operation name="inverter">
 <input wsam:Action="http://com.ppd.ifce.br/ServidorItf/inverterRequest" message="tns:inverter"></input>
@@ -44,6 +56,14 @@
 <operation name="enviarMensagem">
 <input wsam:Action="http://com.ppd.ifce.br/ServidorItf/enviarMensagemRequest" message="tns:enviarMensagem"></input>
 <output wsam:Action="http://com.ppd.ifce.br/ServidorItf/enviarMensagemResponse" message="tns:enviarMensagemResponse"></output>
+</operation>
+<operation name="getMensagem">
+<input wsam:Action="http://com.ppd.ifce.br/ServidorItf/getMensagemRequest" message="tns:getMensagem"></input>
+<output wsam:Action="http://com.ppd.ifce.br/ServidorItf/getMensagemResponse" message="tns:getMensagemResponse"></output>
+</operation>
+<operation name="getUsuarios">
+<input wsam:Action="http://com.ppd.ifce.br/ServidorItf/getUsuariosRequest" message="tns:getUsuarios"></input>
+<output wsam:Action="http://com.ppd.ifce.br/ServidorItf/getUsuariosResponse" message="tns:getUsuariosResponse"></output>
 </operation>
 </portType>
 <binding name="ServidorImplPortBinding" type="tns:ServidorItf">
@@ -76,6 +96,24 @@
 </output>
 </operation>
 <operation name="enviarMensagem">
+<soap:operation soapAction=""></soap:operation>
+<input>
+<soap:body use="literal"></soap:body>
+</input>
+<output>
+<soap:body use="literal"></soap:body>
+</output>
+</operation>
+<operation name="getMensagem">
+<soap:operation soapAction=""></soap:operation>
+<input>
+<soap:body use="literal"></soap:body>
+</input>
+<output>
+<soap:body use="literal"></soap:body>
+</output>
+</operation>
+<operation name="getUsuarios">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>

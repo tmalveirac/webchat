@@ -4,7 +4,7 @@ package br.ifce.ppd.com;
 import br.ifce.ppd.view.Principal;
 
     
-public class Cliente implements ClienteItf{
+public class Cliente {
     
     private String nome;
     private ServidorImplService service;
@@ -14,7 +14,6 @@ public class Cliente implements ClienteItf{
         this.nome=nome;
         service = new ServidorImplService();
         inverterservice = service.getServidorImplPort();
-       
     }
 
     public String getNome() {
@@ -40,14 +39,10 @@ public class Cliente implements ClienteItf{
     public void setInverterservice(ServidorItf inverterservice) {
         this.inverterservice = inverterservice;
     }
-
-
-
-    @Override
-    public void publicarMensagem(String nome) {
-        Principal.escreveMensagemChat(nome);
-    }
     
+    public String getMensagem(){
+        return inverterservice.getMensagem(nome);
+    }
     
 }
 

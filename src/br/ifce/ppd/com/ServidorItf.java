@@ -4,6 +4,7 @@
  */
 package br.ifce.ppd.com;
 
+import java.util.ArrayList;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
   
@@ -16,5 +17,9 @@ public interface ServidorItf{
     @WebMethod String login(String nome);
     
     @WebMethod String enviarMensagem(String nome, String msg);
+    
+    @WebMethod String getMensagem(String nome);
+    
+    @WebMethod ArrayList<String> getUsuarios();
 }
   
