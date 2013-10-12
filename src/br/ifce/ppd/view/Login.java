@@ -4,19 +4,23 @@
  */
 package br.ifce.ppd.view;
 
+import br.ifce.ppd.com.Cliente;
 import com.sun.jmx.remote.internal.ClientCommunicatorAdmin;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author malveira
  */
 public class Login extends javax.swing.JFrame {
-
+    
+    private Cliente cliente;
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        cliente = new Cliente();
     }
 
     /**
@@ -29,16 +33,19 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         jtfLogin = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jbtEntrar = new javax.swing.JButton();
         jbtCadastrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jbtSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jbtEntrar.setText("Entrar");
+        jbtEntrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtEntrarActionPerformed(evt);
+            }
+        });
 
         jbtCadastrar.setText("Cadastrar");
         jbtCadastrar.addActionListener(new java.awt.event.ActionListener() {
@@ -49,9 +56,12 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setText("Login:");
 
-        jLabel2.setText("Servidor:");
-
         jbtSair.setText("Sair");
+        jbtSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -59,10 +69,8 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(93, 93, 93)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jbtSair, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -70,22 +78,17 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(jbtCadastrar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                         .addComponent(jbtEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTextField2)
                     .addComponent(jtfLogin))
                 .addGap(67, 67, 67))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtfLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtEntrar)
                     .addComponent(jbtCadastrar)
@@ -97,8 +100,40 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtCadastrarActionPerformed
+        String nome = jtfLogin.getText();
+        if (cliente.getInverterservice().usuarioJaCadastrado(nome)){
+            cliente.setNome(nome);
+            JOptionPane.showMessageDialog(null, "Usuário Já Cadastrado! "
+                    + "Clique em entrar! ","Aviso",  JOptionPane.WARNING_MESSAGE);
+        }
+        else{
+            cliente.getInverterservice().cadastrar(nome);
+            JOptionPane.showMessageDialog(null, "Usuário Cadastrado com Sucesso! "
+                    + "Clique em entrar! ","Aviso", JOptionPane.INFORMATION_MESSAGE);
+        }
+                   
         
     }//GEN-LAST:event_jbtCadastrarActionPerformed
+
+    private void jbtSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtSairActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jbtSairActionPerformed
+
+    private void jbtEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtEntrarActionPerformed
+        String nome = jtfLogin.getText();
+         if (cliente.getInverterservice().usuarioJaCadastrado(nome)){
+            cliente.setNome(nome);
+            this.setVisible(false);
+            new Principal(cliente).setVisible(true);
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Usuário não Cadastrado! "
+                    + "Clique em Cadastrar! ","Aviso",  JOptionPane.WARNING_MESSAGE);
+        }
+        
+        
+    }//GEN-LAST:event_jbtEntrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,8 +171,6 @@ public class Login extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JButton jbtCadastrar;
     private javax.swing.JButton jbtEntrar;
     private javax.swing.JButton jbtSair;

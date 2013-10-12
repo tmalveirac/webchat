@@ -1,7 +1,7 @@
 
 package br.ifce.ppd.com;
 
-import br.ifce.ppd.view.Principal;
+import java.util.Vector;
 
     
 public class Cliente {
@@ -12,6 +12,11 @@ public class Cliente {
     
     public Cliente(String nome){
         this.nome=nome;
+        service = new ServidorImplService();
+        inverterservice = service.getServidorImplPort();
+    }
+
+    public Cliente() {
         service = new ServidorImplService();
         inverterservice = service.getServidorImplPort();
     }
@@ -40,8 +45,8 @@ public class Cliente {
         this.inverterservice = inverterservice;
     }
     
-    public String getMensagem(){
-        return inverterservice.getMensagem(nome);
+    public Vector<String> getMensagem(){
+        return inverterservice.getMensagens(nome);
     }
     
 }

@@ -4,16 +4,20 @@
  */
 package br.ifce.ppd.view;
 
+import br.ifce.ppd.com.Cliente;
+
+
 /**
  *
  * @author malveira
  */
 public class Aba extends javax.swing.JFrame {
-
+    Cliente cliente;
     /**
      * Creates new form Aba
      */
     public Aba() {
+        //this.cliente=cliente;
         initComponents();
     }
 
@@ -31,6 +35,7 @@ public class Aba extends javax.swing.JFrame {
         jtaMensagem = new javax.swing.JTextArea();
         jtfMensagem = new javax.swing.JTextField();
         jbtEnviar = new javax.swing.JButton();
+        jbtFecharAba = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -39,6 +44,18 @@ public class Aba extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jtaMensagem);
 
         jbtEnviar.setText("Enviar");
+        jbtEnviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtEnviarActionPerformed(evt);
+            }
+        });
+
+        jbtFecharAba.setText("Fechar Aba");
+        jbtFecharAba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtFecharAbaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -55,12 +72,17 @@ public class Aba extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jbtEnviar)
                         .addGap(26, 26, 26))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtFecharAba)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jbtFecharAba)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtfMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -81,6 +103,26 @@ public class Aba extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtEnviarActionPerformed
+         //cliente.getInverterservice().enviarMensagem(cliente.getNome(), cliente.getNome()+" enviou: "+jtfEnviarMensagem.getText());
+//         new Thread(new Runnable() {
+//            public void run() {
+//                //System.err.println(jltUsuario.getSelectedValue().toString());
+//                while(true){
+//                    String resp = cliente.getInverterservice().getMensagem(cliente.getNome());
+//                    if (!resp.equals("")){
+//                         //escreveMensagemChat(resp);
+//                         jtaMensagem.append(resp+"\n");
+//                    }                  
+//                }
+//            }
+//        }).start();
+    }//GEN-LAST:event_jbtEnviarActionPerformed
+
+    private void jbtFecharAbaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtFecharAbaActionPerformed
+       //
+    }//GEN-LAST:event_jbtFecharAbaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,6 +162,7 @@ public class Aba extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtEnviar;
+    private javax.swing.JButton jbtFecharAba;
     private javax.swing.JTextArea jtaMensagem;
     private javax.swing.JTextField jtfMensagem;
     // End of variables declaration//GEN-END:variables

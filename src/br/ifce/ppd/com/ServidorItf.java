@@ -4,7 +4,7 @@
  */
 package br.ifce.ppd.com;
 
-import java.util.ArrayList;
+import java.util.Vector;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
   
@@ -16,10 +16,12 @@ public interface ServidorItf{
     
     @WebMethod String login(String nome);
     
-    @WebMethod String enviarMensagem(String nome, String msg);
+    @WebMethod String enviarMensagem(String origem, String destino, String msg);
     
-    @WebMethod String getMensagem(String nome);
+    @WebMethod Vector<String> getMensagens(String nome);
     
-    @WebMethod ArrayList<String> getUsuarios();
+    @WebMethod Vector<String> getUsuarios();
+    
+    @WebMethod boolean usuarioJaCadastrado(String nome);
 }
   

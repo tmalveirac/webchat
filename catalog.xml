@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://localhost:9999/inverter?wsdl" uri="xml-resources/web-service-references/inverter_1/wsdl/localhost_9999/inverter.wsdl"/>
-    <system systemId="http://localhost:9999/inverter?xsd=1" uri="xml-resources/web-service-references/inverter_1/wsdl/localhost_9999/inverter.xsd_1.xsd"/>
+    <system systemId="http://localhost:9999/inverter?wsdl" uri="xml-resources/web-service-references/inverter/wsdl/localhost_9999/inverter.wsdl"/>
+    <system systemId="http://localhost:9999/inverter?xsd=1" uri="xml-resources/web-service-references/inverter/wsdl/localhost_9999/inverter.xsd_1.xsd"/>
 </catalog>

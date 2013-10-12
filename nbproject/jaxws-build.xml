@@ -33,22 +33,5 @@
         <delete dir="${build.generated.dir}/jax-wsCache/inverter"/>
         <delete dir="${build.generated.sources.dir}/jax-ws/br/ifce/ppd/com"/>
     </target>
-    <target name="wsimport-client-inverter_1" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/inverter_1"/>
-        <property name="wsdl-inverter_1" location="xml-resources/web-service-references/inverter_1/wsdl/localhost_9999/inverter.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/inverter_1" destdir="${build.generated.dir}/jax-wsCache/inverter_1" wsdl="${wsdl-inverter_1}" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" wsdlLocation="http://localhost:9999/inverter?wsdl" xnocompile="true" xendorsed="true">
-            <depends file="${wsdl-inverter_1}"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/inverter_1"/>
-        </wsimport>
-        <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/inverter_1">
-                <include name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="wsimport-client-clean-inverter_1" depends="-init-project">
-        <delete dir="${build.generated.dir}/jax-wsCache/inverter_1"/>
-        <delete dir="${build.generated.sources.dir}/jax-ws/br/ifce/ppd/com"/>
-    </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-inverter, wsimport-client-inverter_1"/>
+    <target name="wsimport-client-generate" depends="wsimport-client-inverter"/>
 </project>

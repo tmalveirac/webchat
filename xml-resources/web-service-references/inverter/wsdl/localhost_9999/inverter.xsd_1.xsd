@@ -8,9 +8,9 @@
 
 <xs:element name="enviarMensagemResponse" type="tns:enviarMensagemResponse"></xs:element>
 
-<xs:element name="getMensagem" type="tns:getMensagem"></xs:element>
+<xs:element name="getMensagens" type="tns:getMensagens"></xs:element>
 
-<xs:element name="getMensagemResponse" type="tns:getMensagemResponse"></xs:element>
+<xs:element name="getMensagensResponse" type="tns:getMensagensResponse"></xs:element>
 
 <xs:element name="getUsuarios" type="tns:getUsuarios"></xs:element>
 
@@ -23,6 +23,22 @@
 <xs:element name="login" type="tns:login"></xs:element>
 
 <xs:element name="loginResponse" type="tns:loginResponse"></xs:element>
+
+<xs:element name="usuarioJaCadastrado" type="tns:usuarioJaCadastrado"></xs:element>
+
+<xs:element name="usuarioJaCadastradoResponse" type="tns:usuarioJaCadastradoResponse"></xs:element>
+
+<xs:complexType name="getMensagens">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getMensagensResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
 
 <xs:complexType name="login">
 <xs:sequence>
@@ -62,6 +78,7 @@
 <xs:sequence>
 <xs:element name="arg0" type="xs:string" minOccurs="0"></xs:element>
 <xs:element name="arg1" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="arg2" type="xs:string" minOccurs="0"></xs:element>
 </xs:sequence>
 </xs:complexType>
 
@@ -71,15 +88,15 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="getMensagem">
+<xs:complexType name="usuarioJaCadastrado">
 <xs:sequence>
 <xs:element name="arg0" type="xs:string" minOccurs="0"></xs:element>
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="getMensagemResponse">
+<xs:complexType name="usuarioJaCadastradoResponse">
 <xs:sequence>
-<xs:element name="return" type="xs:string" minOccurs="0"></xs:element>
+<xs:element name="return" type="xs:boolean"></xs:element>
 </xs:sequence>
 </xs:complexType>
 

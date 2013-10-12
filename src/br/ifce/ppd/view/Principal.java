@@ -2,10 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+// http://localhost:9999/inverter?wsdl
+
 package br.ifce.ppd.view;
 
 import br.ifce.ppd.com.Cliente;
-import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
 
@@ -18,14 +21,48 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
-    public Principal() {
+    public Principal(final Cliente cliente) {
         initComponents();
-        cliente = new Cliente("Tiago");
+        this.cliente = cliente;
         cliente.getInverterservice().cadastrar(cliente.getNome());
-        ArrayList<String> lista = cliente.getInverterservice().getUsuarios();
+        Vector<String> lista = cliente.getInverterservice().getUsuarios();
         insereListaChat(lista);   
-        getRootPane().setDefaultButton(jbtEnviar);
+        //getRootPane().setDefaultButton(jbtEnviar);
         jltUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        
+        //Thread que escuta se chegou mensagens 
+        new Thread(new Runnable() {
+            public void run() {
+                //System.err.println(jltUsuario.getSelectedValue().toString());
+                while(true){
+                    Vector<String> resp =  cliente.getInverterservice().getMensagens(cliente.getNome());
+                    if (resp.size()>0){
+                         for (String s : resp){
+                             String msg[] = s.split("#");
+                             String origem = msg[0];
+                             String mensagem = msg[1];
+                             System.out.println("Origem: " + origem + " mensagem: "+mensagem);
+                             Boolean existeAba = true;
+                             for (Aba2 a : listaAbas){
+                                 if(a.getLoginRemoto().equals(origem)){
+                                     a.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
+                                     continue;
+                                 }
+                                 existeAba = false;
+                             }
+                             if (!existeAba) {
+                                Aba2 aba = new Aba2(origem,cliente);
+                                jtpPainelAbas.addTab(origem,aba);
+                                listaAbas.add(aba);
+                                aba.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
+                             }
+                             
+                         }
+                    }                  
+                }
+            }
+        }).start();
     }
 
     /**
@@ -42,11 +79,6 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jltUsuario = new javax.swing.JList();
         jtpPainelAbas = new javax.swing.JTabbedPane();
-        jpAba1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtaMensagem = new javax.swing.JTextArea();
-        jtfEnviarMensagem = new javax.swing.JTextField();
-        jbtEnviar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -77,53 +109,10 @@ public class Principal extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane3)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtIniciarConversa))
         );
-
-        jpAba1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jtaMensagem.setColumns(20);
-        jtaMensagem.setRows(5);
-        jScrollPane1.setViewportView(jtaMensagem);
-
-        jbtEnviar.setText("Enviar");
-        jbtEnviar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtEnviarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jpAba1Layout = new javax.swing.GroupLayout(jpAba1);
-        jpAba1.setLayout(jpAba1Layout);
-        jpAba1Layout.setHorizontalGroup(
-            jpAba1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpAba1Layout.createSequentialGroup()
-                .addGroup(jpAba1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpAba1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1))
-                    .addGroup(jpAba1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jtfEnviarMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jpAba1Layout.setVerticalGroup(
-            jpAba1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpAba1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpAba1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfEnviarMensagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbtEnviar))
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
-        jtpPainelAbas.addTab("Aba1", jpAba1);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -140,95 +129,86 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jtpPainelAbas))
+                .addComponent(jtpPainelAbas, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jtpPainelAbas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+            .addComponent(jtpPainelAbas, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtEnviarActionPerformed
-        Aba2 aba = new Aba2();
- 
-        //jtaMensagem.append(cliente.getNome()+ " - " + cliente.getInverterservice().inverter("Testando Web Service!"));
-        
-        cliente.getInverterservice().enviarMensagem(cliente.getNome(), cliente.getNome()+" enviou: "+jtfEnviarMensagem.getText());
-        
-        jtpPainelAbas.addTab("Exemplo",aba);
-        jtfEnviarMensagem.setText("");
-    }//GEN-LAST:event_jbtEnviarActionPerformed
-
     private void jbtIniciarConversaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtIniciarConversaActionPerformed
-        new Thread(new Runnable() {
-            public void run() {
-                System.err.println(jltUsuario.getSelectedValue().toString());
-                while(true){
-                    String resp = cliente.getInverterservice().getMensagem(jltUsuario.getSelectedValue().toString());
-                    if (!resp.equals("")){
-                         escreveMensagemChat(resp);
-                    }                  
-                }
-            }
-        }).start();
+        Aba2 aba = new Aba2(jltUsuario.getSelectedValue().toString(),cliente);
+        jtpPainelAbas.addTab(jltUsuario.getSelectedValue().toString(),aba);
+        listaAbas.add(aba);
+//        
+//        new Thread(new Runnable() {
+//            public void run() {
+//                System.err.println(jltUsuario.getSelectedValue().toString());
+//                while(true){
+//                    String resp = cliente.getInverterservice().getMensagem(jltUsuario.getSelectedValue().toString());
+//                    if (!resp.equals("")){
+//                         escreveMensagemChat(resp);
+//                    }                  
+//                }
+//            }
+//        }).start();
     }//GEN-LAST:event_jbtIniciarConversaActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Principal principal = new Principal();
-                principal.setVisible(true);
-                
-                
-                
-                //Verifica se chegou mensagens
-                /*while (true){
-                    String msg = principal.getCliente().getMensagem();
-                    if (!msg.equals("")){
-                        escreveMensagemChat(msg); 
-                    }
-                }*/
-            }
-        });
-        
-
-        
-        
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                Principal principal = new Principal();
+//                principal.setVisible(true);
+//                
+//                
+//                
+//                //Verifica se chegou mensagens
+//                /*while (true){
+//                    String msg = principal.getCliente().getMensagem();
+//                    if (!msg.equals("")){
+//                        escreveMensagemChat(msg); 
+//                    }
+//                }*/
+//            }
+//        });
+//        
+//
+//        
+//        
+//    }
     
-    public static void escreveMensagemChat(String msg){
-        jtaMensagem.append(msg);
-    }
+   
     
     /**
     * Insere um nome na lista de login do Chat
@@ -236,7 +216,7 @@ public class Principal extends javax.swing.JFrame {
     * @param nome   nome a ser inserido na lista do chat
     * @return       void
     */
-    public static void insereListaChat(ArrayList<String> listaLogin){
+    public static void insereListaChat(Vector<String> listaLogin){
         
         for (String s : listaLogin){
             if (idNomeListaChat(s) == -1) {
@@ -273,17 +253,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JButton jbtEnviar;
     private javax.swing.JButton jbtIniciarConversa;
     private static javax.swing.JList jltUsuario;
-    private javax.swing.JPanel jpAba1;
-    private static javax.swing.JTextArea jtaMensagem;
-    private javax.swing.JTextField jtfEnviarMensagem;
     private javax.swing.JTabbedPane jtpPainelAbas;
     // End of variables declaration//GEN-END:variables
     private Cliente cliente;
+    private static Vector<Aba2> listaAbas = new  Vector<Aba2>();
     private static DefaultListModel  listModel = new DefaultListModel();    
 
     public Cliente getCliente() {

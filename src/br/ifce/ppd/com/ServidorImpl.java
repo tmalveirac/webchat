@@ -1,14 +1,14 @@
 
 package br.ifce.ppd.com;
 
-import java.util.ArrayList;
+import java.util.Vector;
 import javax.jws.WebService;
 
 @WebService(endpointInterface = "br.ifce.ppd.com.ServidorItf")
 public class ServidorImpl implements ServidorItf{
     
     //Armazena o login e as mensagens correspondentes num array de arrays
-    private static ArrayList<ArrayList<String>> listaLoginMensagem = new ArrayList<ArrayList<String>>();
+    private static Vector<Vector<String>> listaLoginMensagem = new Vector<Vector<String>>();
     
     
     public String inverter(String msg) {
@@ -21,7 +21,7 @@ public class ServidorImpl implements ServidorItf{
     @Override
     public String cadastrar(String nome) {
         //Primeiro elemento de cada lista é o login. Após o login, são add as mensagens
-        ArrayList<String> listaMensagem = new ArrayList<String>();
+        Vector<String> listaMensagem = new Vector<String>();
         listaMensagem.add(nome);
         listaLoginMensagem.add(listaMensagem);
         return nome+"-cadastrado";
@@ -33,10 +33,11 @@ public class ServidorImpl implements ServidorItf{
     }
 
     @Override
-    public String enviarMensagem(String nome, String msg) {
-        for (ArrayList l : listaLoginMensagem){
-            if (l.get(0).equals(nome)){
-                l.add(msg);
+    public String enviarMensagem(String origem, String destino, String msg) {
+        for (Vector l : listaLoginMensagem){
+            if (l.get(0).equals(destino)){
+                l.add(origem+"#"+msg); //tiago|mesagem
+                System.err.println("Mensagem enviada - Origem: " + origem + "Mensagem: "+msg);
                 break;
             }
         }
@@ -45,31 +46,42 @@ public class ServidorImpl implements ServidorItf{
     }
 
     @Override
-    public String getMensagem(String nome) {
-        String res = "";
-        for (ArrayList l : listaLoginMensagem){
+    public Vector<String> getMensagens(String nome) {
+        Vector<String> array = new Vector<String>();
+        for (Vector l : listaLoginMensagem){
             if (l.get(0).equals(nome)){           
-                //As Mensagens começam no índice 1
-                for (int i=1; i<l.size();i++){
-                    res = res + l.get(i);
+                for (int i=1; i<l.size();i++)  {
+                    array.add((String) l.get(i));
                 }
                 l.clear();
                 l.add(nome);
                 break;
             }
         }
-        return res;
+        return array;
     }
 
     @Override
-    public ArrayList<String> getUsuarios() {
-        ArrayList<String> res = new ArrayList<String>();
+    public Vector<String> getUsuarios() {
+        Vector<String> res = new Vector<String>();
         
-        for (ArrayList l : listaLoginMensagem){
+        for (Vector l : listaLoginMensagem){
             res.add((String) l.get(0));
         }
         
         return res;
+    }
+
+    @Override
+    public boolean usuarioJaCadastrado(String nome) {
+                
+        for (Vector l : listaLoginMensagem){
+            if (l.get(0).equals(nome)){
+                return true;
+            }
+        }
+        
+        return false;
     }
 
 }

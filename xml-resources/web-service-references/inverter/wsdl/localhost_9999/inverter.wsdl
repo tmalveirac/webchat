@@ -28,17 +28,23 @@
 <message name="enviarMensagemResponse">
 <part name="parameters" element="tns:enviarMensagemResponse"></part>
 </message>
-<message name="getMensagem">
-<part name="parameters" element="tns:getMensagem"></part>
+<message name="getMensagens">
+<part name="parameters" element="tns:getMensagens"></part>
 </message>
-<message name="getMensagemResponse">
-<part name="parameters" element="tns:getMensagemResponse"></part>
+<message name="getMensagensResponse">
+<part name="parameters" element="tns:getMensagensResponse"></part>
 </message>
 <message name="getUsuarios">
 <part name="parameters" element="tns:getUsuarios"></part>
 </message>
 <message name="getUsuariosResponse">
 <part name="parameters" element="tns:getUsuariosResponse"></part>
+</message>
+<message name="usuarioJaCadastrado">
+<part name="parameters" element="tns:usuarioJaCadastrado"></part>
+</message>
+<message name="usuarioJaCadastradoResponse">
+<part name="parameters" element="tns:usuarioJaCadastradoResponse"></part>
 </message>
 <portType name="ServidorItf">
 <operation name="inverter">
@@ -57,13 +63,17 @@
 <input wsam:Action="http://com.ppd.ifce.br/ServidorItf/enviarMensagemRequest" message="tns:enviarMensagem"></input>
 <output wsam:Action="http://com.ppd.ifce.br/ServidorItf/enviarMensagemResponse" message="tns:enviarMensagemResponse"></output>
 </operation>
-<operation name="getMensagem">
-<input wsam:Action="http://com.ppd.ifce.br/ServidorItf/getMensagemRequest" message="tns:getMensagem"></input>
-<output wsam:Action="http://com.ppd.ifce.br/ServidorItf/getMensagemResponse" message="tns:getMensagemResponse"></output>
+<operation name="getMensagens">
+<input wsam:Action="http://com.ppd.ifce.br/ServidorItf/getMensagensRequest" message="tns:getMensagens"></input>
+<output wsam:Action="http://com.ppd.ifce.br/ServidorItf/getMensagensResponse" message="tns:getMensagensResponse"></output>
 </operation>
 <operation name="getUsuarios">
 <input wsam:Action="http://com.ppd.ifce.br/ServidorItf/getUsuariosRequest" message="tns:getUsuarios"></input>
 <output wsam:Action="http://com.ppd.ifce.br/ServidorItf/getUsuariosResponse" message="tns:getUsuariosResponse"></output>
+</operation>
+<operation name="usuarioJaCadastrado">
+<input wsam:Action="http://com.ppd.ifce.br/ServidorItf/usuarioJaCadastradoRequest" message="tns:usuarioJaCadastrado"></input>
+<output wsam:Action="http://com.ppd.ifce.br/ServidorItf/usuarioJaCadastradoResponse" message="tns:usuarioJaCadastradoResponse"></output>
 </operation>
 </portType>
 <binding name="ServidorImplPortBinding" type="tns:ServidorItf">
@@ -104,7 +114,7 @@
 <soap:body use="literal"></soap:body>
 </output>
 </operation>
-<operation name="getMensagem">
+<operation name="getMensagens">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
@@ -114,6 +124,15 @@
 </output>
 </operation>
 <operation name="getUsuarios">
+<soap:operation soapAction=""></soap:operation>
+<input>
+<soap:body use="literal"></soap:body>
+</input>
+<output>
+<soap:body use="literal"></soap:body>
+</output>
+</operation>
+<operation name="usuarioJaCadastrado">
 <soap:operation soapAction=""></soap:operation>
 <input>
 <soap:body use="literal"></soap:body>
