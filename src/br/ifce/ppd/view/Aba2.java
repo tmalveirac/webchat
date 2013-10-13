@@ -24,7 +24,7 @@ public class Aba2 extends JPanel{
     private String loginRemoto;
     
     
-    public Aba2(final String loginRemoto, final Cliente cliente){
+    public Aba2(String loginRemoto, Cliente cliente){
        
         this.cliente=cliente;
         this.loginRemoto=loginRemoto;
@@ -38,6 +38,8 @@ public class Aba2 extends JPanel{
         jtaMensagem.setColumns(20);
         jtaMensagem.setRows(5);
         jScrollPane1.setViewportView(jtaMensagem);
+        
+        jtaMensagem.setCaretPosition(jtaMensagem.getDocument().getLength());
 
 
         jbtEnviar.setText("Enviar");
@@ -47,6 +49,11 @@ public class Aba2 extends JPanel{
             }
         });
         
+        jtfMensagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfMensagemActionPerformed(evt);
+            }
+        });
         
         jbtFecharAba.setText("Fechar Aba");
         jbtFecharAba.addActionListener(new java.awt.event.ActionListener() {
@@ -94,17 +101,24 @@ public class Aba2 extends JPanel{
         
     }
     
-     private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {                                          
+    private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {                                          
          cliente.getInverterservice().enviarMensagem(cliente.getNome(),loginRemoto, jtfMensagem.getText());
+         jtaMensagem.append(this.cliente.getNome() + " enviou: " + jtfMensagem.getText()+ "\n");
          jtfMensagem.setText("");
          
     }                                         
 
+    private void jtfMensagemActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        jbtEnviarActionPerformed(evt);
+    }
+     
     private void jbtFecharAbaActionPerformed(java.awt.event.ActionEvent evt) {                                             
         System.err.println("clicou Fechar Aba");
         
         getParent().remove(this);
+        Principal.getListaAbas().remove(this);
     }    
+    
 
     public JTextArea getJtaMensagem() {
         return jtaMensagem;

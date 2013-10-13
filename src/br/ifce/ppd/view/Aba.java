@@ -43,6 +43,12 @@ public class Aba extends javax.swing.JFrame {
         jtaMensagem.setRows(5);
         jScrollPane1.setViewportView(jtaMensagem);
 
+        jtfMensagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtfMensagemActionPerformed(evt);
+            }
+        });
+
         jbtEnviar.setText("Enviar");
         jbtEnviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,6 +129,10 @@ public class Aba extends javax.swing.JFrame {
     private void jbtFecharAbaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtFecharAbaActionPerformed
        //
     }//GEN-LAST:event_jbtFecharAbaActionPerformed
+
+    private void jtfMensagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfMensagemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtfMensagemActionPerformed
 
     /**
      * @param args the command line arguments

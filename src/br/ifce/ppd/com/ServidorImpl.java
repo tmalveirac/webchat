@@ -49,9 +49,10 @@ public class ServidorImpl implements ServidorItf{
     public Vector<String> getMensagens(String nome) {
         Vector<String> array = new Vector<String>();
         for (Vector l : listaLoginMensagem){
-            if (l.get(0).equals(nome)){           
+            if (l.get(0).equals(nome)){  
+                System.err.println("getMensagens " + l.get(0));
                 for (int i=1; i<l.size();i++)  {
-                    array.add((String) l.get(i));
+                    array.add(l.get(i).toString());
                 }
                 l.clear();
                 l.add(nome);

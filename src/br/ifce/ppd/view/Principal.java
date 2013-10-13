@@ -10,6 +10,7 @@ package br.ifce.ppd.view;
 import br.ifce.ppd.com.Cliente;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 /**
@@ -29,6 +30,7 @@ public class Principal extends javax.swing.JFrame {
         insereListaChat(lista);   
         //getRootPane().setDefaultButton(jbtEnviar);
         jltUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.setTitle(cliente.getNome());
         
         
         //Thread que escuta se chegou mensagens 
@@ -37,19 +39,21 @@ public class Principal extends javax.swing.JFrame {
                 //System.err.println(jltUsuario.getSelectedValue().toString());
                 while(true){
                     Vector<String> resp =  cliente.getInverterservice().getMensagens(cliente.getNome());
+                    insereListaChat(cliente.getInverterservice().getUsuarios());
                     if (resp.size()>0){
                          for (String s : resp){
                              String msg[] = s.split("#");
                              String origem = msg[0];
                              String mensagem = msg[1];
                              System.out.println("Origem: " + origem + " mensagem: "+mensagem);
-                             Boolean existeAba = true;
+                             Boolean existeAba = false;
                              for (Aba2 a : listaAbas){
                                  if(a.getLoginRemoto().equals(origem)){
                                      a.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
-                                     continue;
-                                 }
-                                 existeAba = false;
+                                     existeAba=true;
+                                     break;
+                                 }                     
+                                 
                              }
                              if (!existeAba) {
                                 Aba2 aba = new Aba2(origem,cliente);
@@ -141,21 +145,30 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbtIniciarConversaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtIniciarConversaActionPerformed
-        Aba2 aba = new Aba2(jltUsuario.getSelectedValue().toString(),cliente);
-        jtpPainelAbas.addTab(jltUsuario.getSelectedValue().toString(),aba);
-        listaAbas.add(aba);
-//        
-//        new Thread(new Runnable() {
-//            public void run() {
-//                System.err.println(jltUsuario.getSelectedValue().toString());
-//                while(true){
-//                    String resp = cliente.getInverterservice().getMensagem(jltUsuario.getSelectedValue().toString());
-//                    if (!resp.equals("")){
-//                         escreveMensagemChat(resp);
-//                    }                  
-//                }
-//            }
-//        }).start();
+        if (jltUsuario.isSelectionEmpty()){
+            JOptionPane.showMessageDialog(null, "Selecione um contato!"
+                    ,"Aviso",  JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String nomeSelecionado = jltUsuario.getSelectedValue().toString();
+        
+        boolean existeAba = false;
+        //Verifica se já há aba aberta
+        for (Aba2 a : listaAbas){
+            if(a.getLoginRemoto().equals(nomeSelecionado)){
+                existeAba = true;
+                break;
+            }
+        }
+        if (!existeAba){
+            Aba2 aba = new Aba2(nomeSelecionado,cliente);
+            jtpPainelAbas.addTab(nomeSelecionado,aba);
+            listaAbas.add(aba);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Já existe uma aba aberta com este contato!"
+                    ,"Aviso",  JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jbtIniciarConversaActionPerformed
 
     /**
@@ -216,10 +229,10 @@ public class Principal extends javax.swing.JFrame {
     * @param nome   nome a ser inserido na lista do chat
     * @return       void
     */
-    public static void insereListaChat(Vector<String> listaLogin){
+    public  void insereListaChat(Vector<String> listaLogin){
         
         for (String s : listaLogin){
-            if (idNomeListaChat(s) == -1) {
+            if (idNomeListaChat(s) == -1 && !s.equals(this.cliente.getNome())) {
                 listModel.addElement(s);
                 jltUsuario.setModel(listModel);
             }
@@ -264,6 +277,10 @@ public class Principal extends javax.swing.JFrame {
 
     public Cliente getCliente() {
         return cliente;
+    }
+
+    public static Vector<Aba2> getListaAbas() {
+        return listaAbas;
     }
     
     
