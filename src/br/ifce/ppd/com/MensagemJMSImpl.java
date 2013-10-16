@@ -5,10 +5,12 @@
 package br.ifce.ppd.com;
 import br.ifce.ppd.com.corba.*;
 
+//Servidor JMS
 
 public class MensagemJMSImpl extends MensagemJMSPOA{
         public boolean criarFila(String nome){
                 System.out.println("Método CriarFila");
+                
                 return true;
         }
 

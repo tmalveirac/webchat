@@ -15,8 +15,6 @@ public class ServidorImpl implements ServidorItf{
     //Armazena o login e as mensagens correspondentes num array de arrays
     private static Vector<Vector<String>> listaLoginMensagem = new Vector<Vector<String>>();
     
-    
-    
     public String inverter(String msg) {
         StringBuffer strbuf = new StringBuffer(msg);
         System.out.println("Recebido: "+msg);
@@ -33,7 +31,8 @@ public class ServidorImpl implements ServidorItf{
         
         //Criar uma fila no JMS
         
-        conectarCorba();
+        //conectarCorba();
+        criarFilaJMS(nome);
         
         System.out.println("Chamou Corba");
         
@@ -51,6 +50,7 @@ public class ServidorImpl implements ServidorItf{
             if (l.get(0).equals(destino)){
                 l.add(origem+"#"+msg); //tiago|mesagem
                 System.err.println("Mensagem enviada - Origem: " + origem + "Mensagem: "+msg);
+                enviarMensagemJMS(destino, origem+"#"+msg);
                 break;
             }
         }
@@ -63,6 +63,11 @@ public class ServidorImpl implements ServidorItf{
     @Override
     public Vector<String> getMensagens(String nome) {
         Vector<String> array = new Vector<String>();
+        
+        String msg = receberMensagensJMS(nome);
+        
+        System.err.println("Mensagem : " + msg);
+        
         for (Vector l : listaLoginMensagem){
             if (l.get(0).equals(nome)){  
                 System.err.println("getMensagens " + l.get(0));
@@ -145,7 +150,7 @@ public class ServidorImpl implements ServidorItf{
         
     }
     
-    public void enviarMensagemJMS(String origem, String dest, String msg) {
+    public void enviarMensagemJMS(String dest, String msg) {
         try{
             ORB orb = ORB.init(new String[]{},null);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
@@ -167,7 +172,7 @@ public class ServidorImpl implements ServidorItf{
         
     }
     
-    public void receberMensagensJMS(String nome) {
+    public String receberMensagensJMS(String nome) {
         try{
             ORB orb = ORB.init(new String[]{},null);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
@@ -178,13 +183,15 @@ public class ServidorImpl implements ServidorItf{
             
             System.out.println("Execuo o Cliente!");
            
-            msgJMS.getMensagem(nome);       
+            return msgJMS.getMensagem(nome);       
 
         }
         catch (Exception e){
             System.out.println("ERROR : " + e);
             e.printStackTrace(System.out);
         }
+        
+        return "";
         
     }
     
