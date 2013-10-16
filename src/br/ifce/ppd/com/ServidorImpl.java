@@ -3,12 +3,21 @@ package br.ifce.ppd.com;
 
 import java.util.Vector;
 import javax.jws.WebService;
+//Corba
+import br.ifce.ppd.com.corba.*;
+import com.sun.corba.se.spi.transport.CorbaAcceptor;
+import org.omg.CosNaming.*;
+import org.omg.CORBA.*;
+import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.PortableServer.*;
+//
 
 @WebService(endpointInterface = "br.ifce.ppd.com.ServidorItf")
 public class ServidorImpl implements ServidorItf{
     
     //Armazena o login e as mensagens correspondentes num array de arrays
     private static Vector<Vector<String>> listaLoginMensagem = new Vector<Vector<String>>();
+    
     
     
     public String inverter(String msg) {
@@ -24,6 +33,13 @@ public class ServidorImpl implements ServidorItf{
         Vector<String> listaMensagem = new Vector<String>();
         listaMensagem.add(nome);
         listaLoginMensagem.add(listaMensagem);
+        
+        //Criar uma fila no JMS
+        
+        conectarCorba();
+        //ClienteCorba.main(new String[]{});
+        System.out.println("Chamou Corba");
+        
         return nome+"-cadastrado";
     }
 
@@ -43,6 +59,8 @@ public class ServidorImpl implements ServidorItf{
         }
                 
         return "msg enviada";
+        
+        //Enviar Mensagem para uma fila
     }
 
     @Override
@@ -60,6 +78,8 @@ public class ServidorImpl implements ServidorItf{
             }
         }
         return array;
+        
+        //Buscar mensagens na Fila
     }
 
     @Override
@@ -83,6 +103,28 @@ public class ServidorImpl implements ServidorItf{
         }
         
         return false;
+    }
+    
+    public void conectarCorba() {
+        try{
+            ORB orb = ORB.init(new String[]{},null);
+            org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
+            NamingContext naming = NamingContextHelper.narrow(obj);
+            NameComponent[] name = {new NameComponent("MensagemJMS","Exemplo")};
+            org.omg.CORBA.Object objRef = naming.resolve(name);
+            MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
+            
+            System.out.println("Execuo o Cliente!");
+            msgJMS.criarFila("tiago");
+            msgJMS.getMensagem("tiago");
+            msgJMS.escreverMensagem("","");
+
+        }
+        catch (Exception e){
+            System.out.println("ERROR : " + e);
+            e.printStackTrace(System.out);
+        }
+        
     }
 
 }

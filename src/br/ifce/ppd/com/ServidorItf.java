@@ -23,5 +23,6 @@ public interface ServidorItf{
     @WebMethod Vector<String> getUsuarios();
     
     @WebMethod boolean usuarioJaCadastrado(String nome);
+    
 }
   

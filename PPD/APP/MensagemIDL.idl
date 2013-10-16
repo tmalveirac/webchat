@@ -1,0 +1,9 @@
+module Mensagem{
+
+        interface MensagemJMS{
+                boolean criarFila (in string arg1);
+		string getMensagem (in string nome);
+		string escreverMensagem (in string nome, in string msg);
+        };
+};
+
