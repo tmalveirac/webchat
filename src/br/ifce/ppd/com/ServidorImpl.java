@@ -5,11 +5,8 @@ import java.util.Vector;
 import javax.jws.WebService;
 //Corba
 import br.ifce.ppd.com.corba.*;
-import com.sun.corba.se.spi.transport.CorbaAcceptor;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
-import org.omg.CORBA.ORBPackage.InvalidName;
-import org.omg.PortableServer.*;
 //
 
 @WebService(endpointInterface = "br.ifce.ppd.com.ServidorItf")
@@ -37,7 +34,7 @@ public class ServidorImpl implements ServidorItf{
         //Criar uma fila no JMS
         
         conectarCorba();
-        //ClienteCorba.main(new String[]{});
+        
         System.out.println("Chamou Corba");
         
         return nome+"-cadastrado";
@@ -126,6 +123,72 @@ public class ServidorImpl implements ServidorItf{
         }
         
     }
+    
+    public void criarFilaJMS(String nome) {
+        try{
+            ORB orb = ORB.init(new String[]{},null);
+            org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
+            NamingContext naming = NamingContextHelper.narrow(obj);
+            NameComponent[] name = {new NameComponent("MensagemJMS","Exemplo")};
+            org.omg.CORBA.Object objRef = naming.resolve(name);
+            MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
+            
+            System.out.println("Execuo o Cliente!");
+            msgJMS.criarFila(nome);
+            
+
+        }
+        catch (Exception e){
+            System.out.println("ERROR : " + e);
+            e.printStackTrace(System.out);
+        }
+        
+    }
+    
+    public void enviarMensagemJMS(String origem, String dest, String msg) {
+        try{
+            ORB orb = ORB.init(new String[]{},null);
+            org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
+            NamingContext naming = NamingContextHelper.narrow(obj);
+            NameComponent[] name = {new NameComponent("MensagemJMS","Exemplo")};
+            org.omg.CORBA.Object objRef = naming.resolve(name);
+            MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
+            
+            System.out.println("Execuo o Cliente!");
+          
+            
+            msgJMS.escreverMensagem(dest,msg);
+
+        }
+        catch (Exception e){
+            System.out.println("ERROR : " + e);
+            e.printStackTrace(System.out);
+        }
+        
+    }
+    
+    public void receberMensagensJMS(String nome) {
+        try{
+            ORB orb = ORB.init(new String[]{},null);
+            org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
+            NamingContext naming = NamingContextHelper.narrow(obj);
+            NameComponent[] name = {new NameComponent("MensagemJMS","Exemplo")};
+            org.omg.CORBA.Object objRef = naming.resolve(name);
+            MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
+            
+            System.out.println("Execuo o Cliente!");
+           
+            msgJMS.getMensagem(nome);       
+
+        }
+        catch (Exception e){
+            System.out.println("ERROR : " + e);
+            e.printStackTrace(System.out);
+        }
+        
+    }
+    
+    
 
 }
 
