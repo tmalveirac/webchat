@@ -8,7 +8,11 @@ package br.ifce.ppd.view;
  */
 
 import br.ifce.ppd.com.Cliente;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -17,6 +21,7 @@ public class Principal extends javax.swing.JFrame {
 
     public Principal(final Cliente cliente) {
         initComponents();
+        inicializar();
         this.cliente = cliente;
         cliente.getInverterservice().cadastrar(cliente.getNome());
         Vector<String> lista = cliente.getInverterservice().getUsuarios();
@@ -25,38 +30,59 @@ public class Principal extends javax.swing.JFrame {
         jltUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.setTitle(cliente.getNome());
         
+         //Thread que escuta se foram cadastrados novos usuários
+        new Thread(new Runnable() {
+            public void run() {
+              
+                while(flg_thread){
+                   insereListaChat(cliente.getInverterservice().getUsuarios());
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
+        
         
         //Thread que escuta se chegou mensagens 
         new Thread(new Runnable() {
             public void run() {
                 //System.err.println(jltUsuario.getSelectedValue().toString());
                 while(true){
-                    Vector<String> resp =  cliente.getInverterservice().getMensagens(cliente.getNome());
-                    insereListaChat(cliente.getInverterservice().getUsuarios());
-                    if (resp.size()>0){
-                         for (String s : resp){
-                             String msg[] = s.split("#");
-                             String origem = msg[0];
-                             String mensagem = msg[1];
-                             System.out.println("Origem: " + origem + " mensagem: "+mensagem);
-                             Boolean existeAba = false;
-                             for (Aba2 a : listaAbas){
-                                 if(a.getLoginRemoto().equals(origem)){
-                                     a.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
-                                     existeAba=true;
-                                     break;
-                                 }                     
-                                 
+                    try{
+                        Vector<String> resp =  cliente.getInverterservice().getMensagens(cliente.getNome());
+                    
+                        insereListaChat(cliente.getInverterservice().getUsuarios());
+                        if (resp.size()>0){
+                             for (String s : resp){
+                                 String msg[] = s.split("#");
+                                 String origem = msg[0];
+                                 String mensagem = msg[1];
+                                 System.out.println("Origem: " + origem + " mensagem: "+mensagem);
+                                 Boolean existeAba = false;
+                                 for (Aba2 a : listaAbas){
+                                     if(a.getLoginRemoto().equals(origem)){
+                                         a.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
+                                         existeAba=true;
+                                         break;
+                                     }                     
+
+                                 }
+                                 if (!existeAba) {
+                                    Aba2 aba = new Aba2(origem,cliente);
+                                    jtpPainelAbas.addTab(origem,aba);
+                                    listaAbas.add(aba);
+                                    aba.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
+                                 }
+
                              }
-                             if (!existeAba) {
-                                Aba2 aba = new Aba2(origem,cliente);
-                                jtpPainelAbas.addTab(origem,aba);
-                                listaAbas.add(aba);
-                                aba.getJtaMensagem().append(origem+" enviou: "+mensagem+"\n");
-                             }
-                             
-                         }
-                    }                  
+                        }    
+                    }
+                    catch(Exception e){
+                        System.err.println("Erro na Thread!");
+                    }
                 }
             }
         }).start();
@@ -219,6 +245,7 @@ public class Principal extends javax.swing.JFrame {
     private Cliente cliente;
     private static Vector<Aba2> listaAbas = new  Vector<Aba2>();
     private static DefaultListModel  listModel = new DefaultListModel();    
+    private boolean flg_thread=true;
 
     public Cliente getCliente() {
         return cliente;
@@ -228,5 +255,52 @@ public class Principal extends javax.swing.JFrame {
         return listaAbas;
     }
     
-    
+    /**
+    * Código para Tratar evento Fechar Janela pelo X 
+    *             
+    * @return       void
+    */
+    private void inicializar() {
+        addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent we) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowClosing(WindowEvent we) {
+                if (we.getID() == WindowEvent.WINDOW_CLOSING) {
+                    flg_thread=false;
+                    cliente.getInverterservice().logout(cliente.getNome());
+                    System.exit(0);
+                }
+            }
+
+            @Override
+            public void windowClosed(WindowEvent we) {
+                //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowIconified(WindowEvent we) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent we) {
+                //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowActivated(WindowEvent we) {
+                 //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent we) {
+                //To change body of generated methods, choose Tools | Templates.
+            }      
+        });   
+    }
 }

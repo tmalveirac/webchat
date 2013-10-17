@@ -19,16 +19,9 @@ import org.omg.CORBA.*;
 public class ServidorImpl implements ServidorItf{
    
     private static Vector<String> listaLogin = new Vector<String>();
+    private static Vector<String> listaLogados = new Vector<String>();
     
-    //Método de Teste
-    @Override
-    public String inverter(String msg) {
-        StringBuffer strbuf = new StringBuffer(msg);
-        System.out.println("Recebido: "+msg);
-        String retorno = (strbuf.reverse()).toString();
-        return retorno;
-    }
-
+   
     /**
     * Cadastra um usupario via WebService
     *
@@ -65,6 +58,13 @@ public class ServidorImpl implements ServidorItf{
 
     @Override
     public String login(String nome) {
+        listaLogados.add(nome);
+        return nome+"-logado";
+    }
+    
+    @Override
+    public String logout(String nome) {
+        listaLogados.remove(nome);
         return nome+"-logado";
     }
 
@@ -244,6 +244,11 @@ public class ServidorImpl implements ServidorItf{
         
         return "";
         
+    }
+
+    @Override
+    public Vector<String> getUsuariosLogados() {
+        return listaLogados;
     }
    
 }

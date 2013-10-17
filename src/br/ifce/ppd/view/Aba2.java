@@ -40,6 +40,8 @@ public class Aba2 extends JPanel{
         jScrollPane1.setViewportView(jtaMensagem);
         
         jtaMensagem.setCaretPosition(jtaMensagem.getDocument().getLength());
+        
+        jtaMensagem.setEditable(false);
 
 
         jbtEnviar.setText("Enviar");

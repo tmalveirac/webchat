@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.2.4-b01. --><xs:schema xmlns:tns="http://com.ppd.ifce.br/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://com.ppd.ifce.br/">
+<?xml version="1.0" encoding="UTF-8"?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.6 in JDK 6. --><xs:schema xmlns:tns="http://com.ppd.ifce.br/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://com.ppd.ifce.br/">
 
 <xs:element name="cadastrar" type="tns:cadastrar"></xs:element>
 
@@ -14,15 +14,19 @@
 
 <xs:element name="getUsuarios" type="tns:getUsuarios"></xs:element>
 
+<xs:element name="getUsuariosLogados" type="tns:getUsuariosLogados"></xs:element>
+
+<xs:element name="getUsuariosLogadosResponse" type="tns:getUsuariosLogadosResponse"></xs:element>
+
 <xs:element name="getUsuariosResponse" type="tns:getUsuariosResponse"></xs:element>
-
-<xs:element name="inverter" type="tns:inverter"></xs:element>
-
-<xs:element name="inverterResponse" type="tns:inverterResponse"></xs:element>
 
 <xs:element name="login" type="tns:login"></xs:element>
 
 <xs:element name="loginResponse" type="tns:loginResponse"></xs:element>
+
+<xs:element name="logout" type="tns:logout"></xs:element>
+
+<xs:element name="logoutResponse" type="tns:logoutResponse"></xs:element>
 
 <xs:element name="usuarioJaCadastrado" type="tns:usuarioJaCadastrado"></xs:element>
 
@@ -88,6 +92,28 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="getUsuariosLogados">
+<xs:sequence></xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getUsuariosLogadosResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="logout">
+<xs:sequence>
+<xs:element name="arg0" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="logoutResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"></xs:element>
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="usuarioJaCadastrado">
 <xs:sequence>
 <xs:element name="arg0" type="xs:string" minOccurs="0"></xs:element>
@@ -97,18 +123,6 @@
 <xs:complexType name="usuarioJaCadastradoResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:boolean"></xs:element>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="inverter">
-<xs:sequence>
-<xs:element name="arg0" type="xs:string" minOccurs="0"></xs:element>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="inverterResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:string" minOccurs="0"></xs:element>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>

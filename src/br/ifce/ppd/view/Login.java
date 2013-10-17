@@ -8,6 +8,8 @@ package br.ifce.ppd.view;
  */
 
 import br.ifce.ppd.com.Cliente;
+import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
@@ -122,17 +124,31 @@ public class Login extends javax.swing.JFrame {
     private void jbtEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtEntrarActionPerformed
         String nome = jtfLogin.getText();
          if (cliente.getInverterservice().usuarioJaCadastrado(nome)){
-            cliente.setNome(nome);
-            this.setVisible(false);
-            new Principal(cliente).setVisible(true);
-            
+            //Verifica se o usuário já está logado 
+             boolean usuarioJaLogado = false;
+             Vector<String> listaLogin = cliente.getInverterservice().getUsuariosLogados();
+             for (String s : listaLogin){
+                 if (s.equals(nome)){
+                     usuarioJaLogado=true;
+                 }
+             }
+             
+            if (usuarioJaLogado){
+                JOptionPane.showMessageDialog(null, "Usuário já Logado! "
+                   ,"Aviso",  JOptionPane.WARNING_MESSAGE);
+            } 
+            else{
+                cliente.getInverterservice().login(nome);
+                cliente.setNome(nome);
+                this.setVisible(false);
+                new Principal(cliente).setVisible(true);
+            }          
         }
         else{
             JOptionPane.showMessageDialog(null, "Usuário não Cadastrado! "
                     + "Clique em Cadastrar! ","Aviso",  JOptionPane.WARNING_MESSAGE);
         }
-        
-        
+   
     }//GEN-LAST:event_jbtEntrarActionPerformed
 
     /**

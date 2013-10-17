@@ -15,11 +15,13 @@ import javax.jws.WebService;
 
 @WebService
 public interface ServidorItf{
-    @WebMethod String inverter(String nome);
+    @WebMethod Vector<String> getUsuariosLogados();
     
     @WebMethod String cadastrar(String nome);
     
     @WebMethod String login(String nome);
+    
+    @WebMethod String logout(String nome);
     
     @WebMethod String enviarMensagem(String origem, String destino, String msg);
     
