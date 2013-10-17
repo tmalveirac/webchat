@@ -1,9 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import br.ifce.ppd.com.corba.*;
+
+/**
+ * Classe: MensagemJMSImpl.java
+ * Implementação da IDL Corba da aplicação
+ * @author Tiago Malveira
+ * 
+ */
 
 import java.io.*;
 import java.util.*;
@@ -14,11 +16,14 @@ import javax.naming.*;
 import org.exolab.jms.administration.AdminConnectionFactory;
 import org.exolab.jms.administration.JmsAdminServerIfc;
 
-//Servidor JMS
-
 public class MensagemJMSImpl extends MensagemJMSPOA{
 	
-
+	/**
+	* Verifica se existe uma fila no JMS
+	*
+	* @param    nome        nome da fila
+	* @return               true, se existe. False, cc.             
+	*/
 	public boolean existeFila(String nome){
 		try{
 			String url = "tcp://localhost:3035/";
@@ -41,6 +46,12 @@ public class MensagemJMSImpl extends MensagemJMSPOA{
                 return false;
 	}        
 
+	/**
+	* Cria uma fila JMS
+	*
+	* @param    nome        nome da fila
+	* @return               true, se foi criada. False, cc.             
+	*/	
 	public boolean criarFila(String nome){
                 try{
 			String url = "tcp://localhost:3035/";
@@ -61,6 +72,12 @@ public class MensagemJMSImpl extends MensagemJMSPOA{
                 return true;
         }
 
+	/**
+	* Recebe uma mensagem do JMS
+	*
+	* @param    nome        nome da fila
+	* @return               mensagem lida             
+	*/
         public String getMensagem(String nome){
 
 		try{
@@ -96,6 +113,13 @@ public class MensagemJMSImpl extends MensagemJMSPOA{
                 return "";
         }
 
+	/**
+	* Envia uma mensagem do JMS 
+	*
+	* @param    nome        nome da fila
+	* @param    msg		mensagem a ser enviada	
+	* @return                     
+	*/
 	public String escreverMensagem(String nome, String msg){
 		try{
 		        Hashtable properties = new Hashtable();

@@ -1,8 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.com;
+
+/**
+ * Classe: ServidorCorba.java
+ * Servidor Corba (Apenas para Teste!)
+ * @author Tiago Malveira
+ * 
+ */
 
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;

@@ -1,8 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.com;
+
+/**
+ * Classe: Publicador.java
+ * Publicador do serviço (WS)
+ * @author Tiago Malveira
+ * 
+ */
 
 import javax.xml.ws.Endpoint;
 

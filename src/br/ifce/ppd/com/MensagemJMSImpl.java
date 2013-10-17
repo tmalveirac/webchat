@@ -1,11 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.ifce.ppd.com;
 import br.ifce.ppd.com.corba.MensagemJMSPOA;
 
-//Servidor JMS
+/**
+ * Classe: MensagemJMSImpl.java
+ * Implementação da Interface IDL Corba (Lado Servidor) (Apenas para Teste!)
+ * @author Tiago Malveira
+ * 
+ */
 
 public class MensagemJMSImpl extends MensagemJMSPOA{
         public boolean criarFila(String nome){

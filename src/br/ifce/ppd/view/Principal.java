@@ -1,11 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-// http://localhost:9999/inverter?wsdl
-
 package br.ifce.ppd.view;
+
+/**
+ * Classe: Principal.java
+ * View Principal do Chat
+ * @author Tiago Malveira
+ * 
+ */
 
 import br.ifce.ppd.com.Cliente;
 import java.util.Vector;
@@ -13,22 +13,15 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
-/**
- *
- * @author malveira
- */
 public class Principal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principal
-     */
     public Principal(final Cliente cliente) {
         initComponents();
         this.cliente = cliente;
         cliente.getInverterservice().cadastrar(cliente.getNome());
         Vector<String> lista = cliente.getInverterservice().getUsuarios();
         insereListaChat(lista);   
-        //getRootPane().setDefaultButton(jbtEnviar);
+
         jltUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.setTitle(cliente.getNome());
         
@@ -171,55 +164,7 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbtIniciarConversaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                Principal principal = new Principal();
-//                principal.setVisible(true);
-//                
-//                
-//                
-//                //Verifica se chegou mensagens
-//                /*while (true){
-//                    String msg = principal.getCliente().getMensagem();
-//                    if (!msg.equals("")){
-//                        escreveMensagemChat(msg); 
-//                    }
-//                }*/
-//            }
-//        });
-//        
-//
-//        
-//        
-//    }
+
     
    
     

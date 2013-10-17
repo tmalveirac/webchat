@@ -1,23 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.view;
 
+/**
+ * Classe: Login.java
+ * View Login do chat
+ * @author Tiago Malveira
+ * 
+ */
+
 import br.ifce.ppd.com.Cliente;
-import com.sun.jmx.remote.internal.ClientCommunicatorAdmin;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author malveira
- */
 public class Login extends javax.swing.JFrame {
     
     private Cliente cliente;
-    /**
-     * Creates new form Login
-     */
+
     public Login() {
         initComponents();
         cliente = new Cliente();

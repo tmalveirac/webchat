@@ -1,22 +1,26 @@
-
 package br.ifce.ppd.com;
+
+/**
+ * Classe: ServidorImpl.java
+ * Implementação do serviço (WebService) da aplicação
+ * @author Tiago Malveira
+ * 
+ */
 
 import br.ifce.ppd.com.corba.MensagemJMSHelper;
 import br.ifce.ppd.com.corba.MensagemJMS;
 import java.util.Vector;
 import javax.jws.WebService;
-//Corba
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
-//
+
 
 @WebService(endpointInterface = "br.ifce.ppd.com.ServidorItf")
 public class ServidorImpl implements ServidorItf{
-    
-    //Armazena o login e as mensagens correspondentes num array de arrays
-    private static Vector<Vector<String>> listaLoginMensagem = new Vector<Vector<String>>();
+   
     private static Vector<String> listaLogin = new Vector<String>();
     
+    //Método de Teste
     @Override
     public String inverter(String msg) {
         StringBuffer strbuf = new StringBuffer(msg);
@@ -25,12 +29,15 @@ public class ServidorImpl implements ServidorItf{
         return retorno;
     }
 
+    /**
+    * Cadastra um usupario via WebService
+    *
+    * @param    nome        nome da fila
+    * @return                            
+    */
     @Override
     public String cadastrar(String nome) {
-        //Primeiro elemento de cada lista é o login. Após o login, são add as mensagens
-        //Vector<String> listaMensagem = new Vector<String>();
-        //listaMensagem.add(nome);
-        //listaLoginMensagem.add(listaMensagem);
+        
         
         //Criar uma fila no JMS
         if (!existeFilaJMS(nome)){
@@ -50,8 +57,7 @@ public class ServidorImpl implements ServidorItf{
             if (!estaNaLista)
                 listaLogin.add(nome);
         }
-       
-        
+              
         System.out.println("Chamou Corba!");
         
         return nome+"-cadastrado";
@@ -62,72 +68,56 @@ public class ServidorImpl implements ServidorItf{
         return nome+"-logado";
     }
 
+    /**
+    * Envia uma mensagem via WebService
+    *
+    * @param    nome        nome da fila
+    * @return                            
+    */
     @Override
     public String enviarMensagem(String origem, String destino, String msg) {
-        /*
-        for (Vector l : listaLoginMensagem){
-            if (l.get(0).equals(destino)){
-                l.add(origem+"#"+msg); //tiago|mesagem
-                System.err.println("Mensagem enviada - Origem: " + origem + "Mensagem: "+msg);
-                enviarMensagemJMS(destino, origem+"#"+msg);
-                break;
-            }
-        }
-        */
         
+        //Envia mensagem para uma fila JMS
         enviarMensagemJMS(destino, origem+"#"+msg);
                 
         return "msg enviada";
 
     }
 
+    /**
+    * Recebe uma mensagem via WebService
+    *
+    * @param    nome        nome da fila
+    * @return               Vector de mensagens             
+    */
     @Override
     public Vector<String> getMensagens(String nome) {
         Vector<String> array = new Vector<String>();
         
+        //Busca mensagem na fila do JMS
         String msg = receberMensagensJMS(nome);
         
-        System.err.println("Mensagem : " + msg);
-        /*
-        for (Vector l : listaLoginMensagem){
-            if (l.get(0).equals(nome)){  
-                System.err.println("getMensagens " + l.get(0));
-                for (int i=1; i<l.size();i++)  {
-                    array.add(l.get(i).toString());
-                }
-                l.clear();
-                l.add(nome);
-                break;
-            }
-        }
-        */
+        System.out.println("Mensagem : " + msg);
+       
         array.add(msg);
         return array;
-        
-        //Buscar mensagens na Fila
+       
     }
 
     @Override
-    public Vector<String> getUsuarios() {
-        //Vector<String> res = new Vector<String>();
-        /*
-        for (Vector l : listaLoginMensagem){
-            res.add((String) l.get(0));
-        }
-        * */
-        
+    public Vector<String> getUsuarios() {       
         return listaLogin;
     }
-
+    
+    /**
+    * Verifica se um usuário está cadastrado
+    *
+    * @param    nome        nome do usuário
+    * @return               true, se o usuário está cadastrado. Caso contrário, false             
+    */
     @Override
     public boolean usuarioJaCadastrado(String nome) {
-        /*        
-        for (Vector l : listaLoginMensagem){
-            if (l.get(0).equals(nome)){
-                return true;
-            }
-        }
-        */ 
+         
         for (String l : listaLogin){
             if (l.equals(nome)){
                 return true;
@@ -142,7 +132,13 @@ public class ServidorImpl implements ServidorItf{
         return false;
     }
    
-     public boolean existeFilaJMS(String nome) {
+    /**
+    * Verifica se uma fila existe no JMS via corba
+    *
+    * @param    nome        nome da fila
+    * @return               true, caso exista. Caso contrário, false             
+    */    
+    public boolean existeFilaJMS(String nome) {
        try{
             ORB orb = ORB.init(new String[]{},null);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
@@ -165,6 +161,12 @@ public class ServidorImpl implements ServidorItf{
         return false;
     }
     
+    /**
+    * Cria uma fila JMS via corba
+    *
+    * @param    nome        nome da fila
+    * @return               true, se a fila foi criada. Caso contrário, false.          
+    */ 
     public boolean criarFilaJMS(String nome) {
        try{
             ORB orb = ORB.init(new String[]{},null);
@@ -186,6 +188,13 @@ public class ServidorImpl implements ServidorItf{
         return false;
     }
     
+    /**
+    * Envia uma mensagem do JMS via corba
+    *
+    * @param    dest        nome da fila
+    * @param    msg         mensagem
+    * @return   void         
+    */
     public void enviarMensagemJMS(String dest, String msg) {
         try{
             ORB orb = ORB.init(new String[]{},null);
@@ -208,6 +217,12 @@ public class ServidorImpl implements ServidorItf{
         
     }
     
+    /**
+    * Recebe uma mensagem do JMS via corba
+    *
+    * @param    nome        nome da fila
+    * @return               mensagem lida             
+    */
     public String receberMensagensJMS(String nome) {
         try{
             ORB orb = ORB.init(new String[]{},null);
@@ -230,8 +245,6 @@ public class ServidorImpl implements ServidorItf{
         return "";
         
     }
-    
-    
-
+   
 }
 

@@ -1,8 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.com;
+
+/**
+ * Classe: ClienteCorba.java
+ * Código do Cliente Corba da aplicação (Apenas para Teste!)
+ * @author Tiago Malveira
+ * 
+ */
 
 import br.ifce.ppd.com.corba.MensagemJMSHelper;
 import br.ifce.ppd.com.corba.MensagemJMS;

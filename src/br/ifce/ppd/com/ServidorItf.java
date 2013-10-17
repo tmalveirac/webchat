@@ -1,13 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.com;
+
+/**
+ * Classe: ServidorItf.java
+ * Interface WebService
+ * @author Tiago Malveira
+ * 
+ */
 
 import java.util.Vector;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
   
+// WSDL: http://localhost:9999/inverter?wsdl
+
 @WebService
 public interface ServidorItf{
     @WebMethod String inverter(String nome);

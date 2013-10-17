@@ -1,16 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.view;
+
 
 import br.ifce.ppd.com.Cliente;
 
-
 /**
- *
- * @author malveira
+ * Classe: Aba.java
+ * View Aba - Apenas para Teste
+ * @author Tiago Malveira
+ * 
  */
+
 public class Aba extends javax.swing.JFrame {
     Cliente cliente;
     /**

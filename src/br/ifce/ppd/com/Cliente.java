@@ -1,8 +1,13 @@
-
 package br.ifce.ppd.com;
 
-import java.util.Vector;
+/**
+ * Classe: Cliente.java
+ * Código do Cliente (WebService) da aplicação
+ * @author Tiago Malveira
+ * 
+ */
 
+import java.util.Vector;
     
 public class Cliente {
     

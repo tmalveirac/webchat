@@ -1,17 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ifce.ppd.view;
+
+/**
+ * Classe: Aba2.java
+ * View Aba do chat
+ * @author Tiago Malveira
+ * 
+ */
 
 import br.ifce.ppd.com.Cliente;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-/**
- *
- * @author malveira
- */
+
 public class Aba2 extends JPanel{
     
 
@@ -101,13 +101,14 @@ public class Aba2 extends JPanel{
         
     }
     
+    //Envia mensagem
     private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {                                          
          cliente.getInverterservice().enviarMensagem(cliente.getNome(),loginRemoto, jtfMensagem.getText());
          jtaMensagem.append(this.cliente.getNome() + " enviou: " + jtfMensagem.getText()+ "\n");
          jtfMensagem.setText("");
          
     }                                         
-
+    
     private void jtfMensagemActionPerformed(java.awt.event.ActionEvent evt) {                                            
         jbtEnviarActionPerformed(evt);
     }
@@ -118,8 +119,7 @@ public class Aba2 extends JPanel{
         getParent().remove(this);
         Principal.getListaAbas().remove(this);
     }    
-    
-
+   
     public JTextArea getJtaMensagem() {
         return jtaMensagem;
     }
