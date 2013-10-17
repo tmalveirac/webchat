@@ -4,7 +4,8 @@
  */
 package br.ifce.ppd.com;
 
-import br.ifce.ppd.com.corba.*;
+import br.ifce.ppd.com.corba.MensagemJMSHelper;
+import br.ifce.ppd.com.corba.MensagemJMS;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;

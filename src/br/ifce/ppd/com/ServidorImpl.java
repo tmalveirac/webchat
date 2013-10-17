@@ -1,10 +1,11 @@
 
 package br.ifce.ppd.com;
 
+import br.ifce.ppd.com.corba.MensagemJMSHelper;
+import br.ifce.ppd.com.corba.MensagemJMS;
 import java.util.Vector;
 import javax.jws.WebService;
 //Corba
-import br.ifce.ppd.com.corba.*;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 //
@@ -14,7 +15,9 @@ public class ServidorImpl implements ServidorItf{
     
     //Armazena o login e as mensagens correspondentes num array de arrays
     private static Vector<Vector<String>> listaLoginMensagem = new Vector<Vector<String>>();
+    private static Vector<String> listaLogin = new Vector<String>();
     
+    @Override
     public String inverter(String msg) {
         StringBuffer strbuf = new StringBuffer(msg);
         System.out.println("Recebido: "+msg);
@@ -25,16 +28,31 @@ public class ServidorImpl implements ServidorItf{
     @Override
     public String cadastrar(String nome) {
         //Primeiro elemento de cada lista é o login. Após o login, são add as mensagens
-        Vector<String> listaMensagem = new Vector<String>();
-        listaMensagem.add(nome);
-        listaLoginMensagem.add(listaMensagem);
+        //Vector<String> listaMensagem = new Vector<String>();
+        //listaMensagem.add(nome);
+        //listaLoginMensagem.add(listaMensagem);
         
         //Criar uma fila no JMS
+        if (!existeFilaJMS(nome)){
+            System.err.println(nome+" Não está na Fila");
+             if(criarFilaJMS(nome)){
+                listaLogin.add(nome);
+            }
+        }
+        else{
+            System.err.println(nome+" Está na Fila");
+            boolean estaNaLista = false;
+            for (String s : listaLogin){
+                if(s.equals(nome)){
+                    estaNaLista=true;
+                }
+            }
+            if (!estaNaLista)
+                listaLogin.add(nome);
+        }
+       
         
-        //conectarCorba();
-        criarFilaJMS(nome);
-        
-        System.out.println("Chamou Corba");
+        System.out.println("Chamou Corba!");
         
         return nome+"-cadastrado";
     }
@@ -46,6 +64,7 @@ public class ServidorImpl implements ServidorItf{
 
     @Override
     public String enviarMensagem(String origem, String destino, String msg) {
+        /*
         for (Vector l : listaLoginMensagem){
             if (l.get(0).equals(destino)){
                 l.add(origem+"#"+msg); //tiago|mesagem
@@ -54,10 +73,12 @@ public class ServidorImpl implements ServidorItf{
                 break;
             }
         }
+        */
+        
+        enviarMensagemJMS(destino, origem+"#"+msg);
                 
         return "msg enviada";
-        
-        //Enviar Mensagem para uma fila
+
     }
 
     @Override
@@ -67,7 +88,7 @@ public class ServidorImpl implements ServidorItf{
         String msg = receberMensagensJMS(nome);
         
         System.err.println("Mensagem : " + msg);
-        
+        /*
         for (Vector l : listaLoginMensagem){
             if (l.get(0).equals(nome)){  
                 System.err.println("getMensagens " + l.get(0));
@@ -79,6 +100,8 @@ public class ServidorImpl implements ServidorItf{
                 break;
             }
         }
+        */
+        array.add(msg);
         return array;
         
         //Buscar mensagens na Fila
@@ -86,29 +109,41 @@ public class ServidorImpl implements ServidorItf{
 
     @Override
     public Vector<String> getUsuarios() {
-        Vector<String> res = new Vector<String>();
-        
+        //Vector<String> res = new Vector<String>();
+        /*
         for (Vector l : listaLoginMensagem){
             res.add((String) l.get(0));
         }
+        * */
         
-        return res;
+        return listaLogin;
     }
 
     @Override
     public boolean usuarioJaCadastrado(String nome) {
-                
+        /*        
         for (Vector l : listaLoginMensagem){
             if (l.get(0).equals(nome)){
                 return true;
             }
         }
+        */ 
+        for (String l : listaLogin){
+            if (l.equals(nome)){
+                return true;
+            }
+        }
+        
+        if (existeFilaJMS(nome)){
+            listaLogin.add(nome);
+            return true;
+        }
         
         return false;
     }
-    
-    public void conectarCorba() {
-        try{
+   
+     public boolean existeFilaJMS(String nome) {
+       try{
             ORB orb = ORB.init(new String[]{},null);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
             NamingContext naming = NamingContextHelper.narrow(obj);
@@ -116,21 +151,22 @@ public class ServidorImpl implements ServidorItf{
             org.omg.CORBA.Object objRef = naming.resolve(name);
             MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
             
-            System.out.println("Execuo o Cliente!");
-            msgJMS.criarFila("tiago");
-            msgJMS.getMensagem("tiago");
-            msgJMS.escreverMensagem("","");
+            System.out.println("Executou o Cliente!");
+            return msgJMS.existeFila(nome);
+            
 
         }
         catch (Exception e){
+            System.out.println("ERRO Existe FILA!");
             System.out.println("ERROR : " + e);
             e.printStackTrace(System.out);
+            
         }
-        
+        return false;
     }
     
-    public void criarFilaJMS(String nome) {
-        try{
+    public boolean criarFilaJMS(String nome) {
+       try{
             ORB orb = ORB.init(new String[]{},null);
             org.omg.CORBA.Object obj = orb.resolve_initial_references("NameService");
             NamingContext naming = NamingContextHelper.narrow(obj);
@@ -138,8 +174,8 @@ public class ServidorImpl implements ServidorItf{
             org.omg.CORBA.Object objRef = naming.resolve(name);
             MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
             
-            System.out.println("Execuo o Cliente!");
-            msgJMS.criarFila(nome);
+            System.out.println("Executou o Cliente!");
+            return msgJMS.criarFila(nome);
             
 
         }
@@ -147,7 +183,7 @@ public class ServidorImpl implements ServidorItf{
             System.out.println("ERROR : " + e);
             e.printStackTrace(System.out);
         }
-        
+        return false;
     }
     
     public void enviarMensagemJMS(String dest, String msg) {
@@ -159,7 +195,7 @@ public class ServidorImpl implements ServidorItf{
             org.omg.CORBA.Object objRef = naming.resolve(name);
             MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
             
-            System.out.println("Execuo o Cliente!");
+            System.out.println("Executou o Cliente!");
           
             
             msgJMS.escreverMensagem(dest,msg);
@@ -181,7 +217,7 @@ public class ServidorImpl implements ServidorItf{
             org.omg.CORBA.Object objRef = naming.resolve(name);
             MensagemJMS msgJMS = MensagemJMSHelper.narrow(objRef);
             
-            System.out.println("Execuo o Cliente!");
+            System.out.println("Executou o Cliente!");
            
             return msgJMS.getMensagem(nome);       
 

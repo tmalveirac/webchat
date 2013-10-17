@@ -17,21 +17,41 @@ import org.exolab.jms.administration.JmsAdminServerIfc;
 //Servidor JMS
 
 public class MensagemJMSImpl extends MensagemJMSPOA{
-        public boolean criarFila(String nome){
-                try{
+	
+
+	public boolean existeFila(String nome){
+		try{
 			String url = "tcp://localhost:3035/";
                 	JmsAdminServerIfc admin = AdminConnectionFactory.create(url);
 			String queue = nome;
 			Boolean isQueue = Boolean.TRUE;
 			if (admin.destinationExists(queue)) {
 				System.out.println(queue + " já existe!");
+				return true;
+			} 
+			else{
+				System.out.println(queue + " não existe!");
 				return false;
-			} else {
-				System.out.println(queue + " ainda não existe. Cadastrando..");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+                
+                return false;
+	}        
+
+	public boolean criarFila(String nome){
+                try{
+			String url = "tcp://localhost:3035/";
+                	JmsAdminServerIfc admin = AdminConnectionFactory.create(url);
+			String queue = nome;
+			Boolean isQueue = Boolean.TRUE;
+			if (!admin.destinationExists(queue)) {
 				if (!admin.addDestination(queue, isQueue)) {
-                        		System.err.println("Falha ao criar queue " + queue);
+		        		System.err.println("Falha ao criar queue " + queue);
 					return false;
-                		}
+				}
 			}
 		}
 		catch(Exception e){

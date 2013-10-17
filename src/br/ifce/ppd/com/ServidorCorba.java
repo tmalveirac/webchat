@@ -4,7 +4,6 @@
  */
 package br.ifce.ppd.com;
 
-import br.ifce.ppd.com.corba.*;
 import org.omg.CosNaming.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;

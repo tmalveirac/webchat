@@ -4,6 +4,7 @@ module Mensagem{
                 boolean criarFila (in string arg1);
 		string getMensagem (in string nome);
 		string escreverMensagem (in string nome, in string msg);
+		boolean existeFila ( in string nome);
         };
 };
 

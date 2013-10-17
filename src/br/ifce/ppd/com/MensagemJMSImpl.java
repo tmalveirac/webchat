@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package br.ifce.ppd.com;
-import br.ifce.ppd.com.corba.*;
+import br.ifce.ppd.com.corba.MensagemJMSPOA;
 
 //Servidor JMS
 
@@ -22,5 +22,10 @@ public class MensagemJMSImpl extends MensagemJMSPOA{
 	public String escreverMensagem(String nome, String msg){
                 System.out.println("Método escreverMensagem");
                 return "";
+        }
+
+        @Override
+        public boolean existeFila(String nome) {
+            return true;
         }
 }
